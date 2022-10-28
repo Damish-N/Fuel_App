@@ -48,6 +48,7 @@ public class SignUpActivity extends AppCompatActivity {
                         rePasswordString = rePasswordVehicle.getText().toString();
                         type = "1";
                         if (vehicleNumberString.isEmpty() && passwordString.isEmpty() && rePasswordString.isEmpty()) {
+                            System.out.println();
                             Toast.makeText(SignUpActivity.this, "Please fill all the fields", Toast.LENGTH_SHORT).show();
                         } else {
                             if (rePasswordString.equals(passwordString)) {

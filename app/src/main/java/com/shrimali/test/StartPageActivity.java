@@ -10,7 +10,7 @@ import android.widget.Button;
 
 import java.util.Objects;
 
-public class StartPage extends AppCompatActivity {
+public class StartPageActivity extends AppCompatActivity {
 
     Button vehicleOwner, fuelStation;
 
@@ -28,7 +28,7 @@ public class StartPage extends AppCompatActivity {
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Intent intent = new Intent(StartPage.this, SignInActivity.class);
+                        Intent intent = new Intent(StartPageActivity.this, SignInActivity.class);
                         startActivity(intent);
                     }
                 }
@@ -38,7 +38,7 @@ public class StartPage extends AppCompatActivity {
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Intent intent = new Intent(StartPage.this, SignInFuelStation.class);
+                        Intent intent = new Intent(StartPageActivity.this, SignInFuelStation.class);
                         startActivity(intent);
                     }
                 }
