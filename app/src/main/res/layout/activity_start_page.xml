@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center_horizontal"
+    android:backgroundTint="#2e313b"
+    android:background="@color/white">
+
+    <ImageView
+        android:layout_width="500dp"
+        android:layout_height="350dp"
+        android:src="@drawable/image"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:letterSpacing="0.03"
+        android:text="Fuel App"
+        android:textColor="@color/white"
+        android:textSize="35dp"
+        android:textStyle="bold" />
+
+  <LinearLayout
+      android:gravity="center"
+      android:layout_width="wrap_content"
+      android:orientation="vertical"
+      android:layout_height="match_parent">
+      <Button
+          android:id="@+id/vehicleOwner"
+          android:layout_width="350dp"
+          android:layout_height="45dp"
+          android:text="Vehicle OWNER"
+          android:background="@drawable/forget"
+          android:textColor="@color/white"
+          android:textStyle="bold"
+          android:textSize="18dp"
+          android:backgroundTint="#ec430d"
+          android:layout_marginTop="25dp"
+          android:paddingLeft="20dp"/>
+
+      <Space
+          android:layout_width="0dp"
+          android:layout_height="25dp"></Space>
+      <Button
+          android:id="@+id/fuelStation"
+          android:layout_width="350dp"
+          android:layout_height="45dp"
+          android:background="@drawable/forget"
+          android:text="Fuel Statstion"
+          android:textColor="@color/white"
+          android:textStyle="bold"
+          android:textSize="18dp"
+          android:layout_marginTop="25dp"
+          android:paddingLeft="20dp"/>
+  </LinearLayout>
+
+
+
+</LinearLayout>
