@@ -6,8 +6,10 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.shrimali.test.models.DBHelper;
@@ -17,9 +19,11 @@ import java.util.Objects;
 public class SignUpActivity extends AppCompatActivity {
 
     EditText vehicleNumber, passwordVehicle, rePasswordVehicle;
-    String vehicleNumberString, passwordString, rePasswordString, type;
+    String vehicleNumberString, passwordString, rePasswordString, type,fType;
     DBHelper DB;
     Button regBtnVehicle;
+    Spinner spinner;
+    String[] items = new String[]{"Petrol", "Diesel"};
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -33,6 +37,11 @@ public class SignUpActivity extends AppCompatActivity {
         passwordVehicle = findViewById(R.id.passwordVehicle);
         rePasswordVehicle = findViewById(R.id.rePasswordVehicle);
         regBtnVehicle = findViewById(R.id.regBtnVehicle);
+        spinner = findViewById(R.id.typeOfFuel);
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, items);
+//set the spinners adapter to the previously created one.
+        spinner.setAdapter(adapter);
 
 
         DB = new DBHelper(this);
@@ -46,6 +55,7 @@ public class SignUpActivity extends AppCompatActivity {
                         vehicleNumberString = vehicleNumber.getText().toString();
                         passwordString = passwordVehicle.getText().toString();
                         rePasswordString = rePasswordVehicle.getText().toString();
+                        fType = spinner.getSelectedItem().toString();
                         type = "1";
                         if (vehicleNumberString.isEmpty() && passwordString.isEmpty() && rePasswordString.isEmpty()) {
                             System.out.println();
@@ -54,7 +64,7 @@ public class SignUpActivity extends AppCompatActivity {
                             if (rePasswordString.equals(passwordString)) {
                                 Boolean checkUser = DB.checkUsername(vehicleNumberString);
                                 if (!checkUser) {
-                                    Boolean insert = DB.insertData(vehicleNumberString, passwordString, type,"No district");
+                                    Boolean insert = DB.insertData(vehicleNumberString, passwordString, type,"No district",fType);
                                     if (insert) {
                                         Toast.makeText(SignUpActivity.this, "Successfully created Account", Toast.LENGTH_SHORT).show();
                                         Intent intent = new Intent(SignUpActivity.this, SignInActivity.class);

@@ -17,7 +17,7 @@ public class DBHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
         //1-for vehicle 0-for fuel station
-        sqLiteDatabase.execSQL("create Table users(username TEXT primary key, password TEXT,district TEXT,type TEXT)");
+        sqLiteDatabase.execSQL("create Table users(username TEXT primary key, password TEXT,district TEXT,type TEXT,fType TEXT)");
     }
 
     @Override
@@ -25,13 +25,14 @@ public class DBHelper extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL("drop Table if exists users");
     }
 
-    public Boolean insertData(String userName, String password, String type,String district) {
+    public Boolean insertData(String userName, String password, String type,String district,String fType) {
         SQLiteDatabase sqLiteDatabase = this.getReadableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put("username", userName);
         contentValues.put("password", password);
         contentValues.put("type", type);
         contentValues.put("district",district);
+        contentValues.put("fType",fType);
         long result = sqLiteDatabase.insert("users", null, contentValues);
         if (result == -1) {
             return false;
