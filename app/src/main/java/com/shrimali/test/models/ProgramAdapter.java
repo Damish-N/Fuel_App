@@ -1,6 +1,7 @@
 package com.shrimali.test.models;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.shrimali.test.R;
+import com.shrimali.test.SubmitDetailsActivity;
 
 import java.util.ArrayList;
 
@@ -50,7 +52,12 @@ public class ProgramAdapter extends ArrayAdapter<String> {
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Toast.makeText(context, "Hello", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(getContext(), SubmitDetailsActivity.class);
+                        intent.putExtra("name",shedName.get(position));
+                        intent.putExtra("id",shedId.get(position));
+                        context.startActivity(intent);
+
+                        Toast.makeText(context, shedName.get(position).toString(), Toast.LENGTH_SHORT).show();
                     }
                 }
         );

@@ -36,7 +36,7 @@
                 android:layout_height="match_parent">
 
                 <TextView
-                    android:id="@+id/shed_id"
+                    android:id="@+id/shed_details"
                     android:textColor="@color/white"
                     android:textStyle="bold"
                     android:textSize="25sp"
@@ -45,7 +45,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>
                 <TextView
-                    android:id="@+id/shed_details"
+                    android:id="@+id/shed_id"
                     android:textColor="@color/white"
                     android:textStyle="bold"
                     android:textSize="15sp"

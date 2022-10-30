@@ -10,7 +10,9 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
+import android.view.View;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -38,8 +40,9 @@ public class DashboardFuel extends AppCompatActivity {
     ListView listView;
     private RequestQueue mRequestQueue;
     private StringRequest mStringRequest;
+    private ProgressBar progressFuel;
 
-    String url = "http://192.168.8.102:8081/api/Fuel/GetFuelStatus";
+    String url = "http://192.168.8.100:8081/api/Fuel/GetFuelStatus";
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -49,12 +52,14 @@ public class DashboardFuel extends AppCompatActivity {
 
         Objects.requireNonNull(getSupportActionBar()).hide();
         listView = findViewById(R.id.mainItemFuel);
+        progressFuel = findViewById(R.id.progressFuel);
 
         SharedPreferences sh = getSharedPreferences("MySharedPref", Context.MODE_PRIVATE);
         String s1 = sh.getString("userName", "");
 
         System.out.println("Your email is:" + s1);
-
+        progressFuel.setVisibility(View.VISIBLE);
+        listView.setVisibility(View.GONE);
         getData(s1, "Petrol");
         getData(s1, "Diesel");
 
@@ -65,7 +70,7 @@ public class DashboardFuel extends AppCompatActivity {
         mRequestQueue = Volley.newRequestQueue(this);
 
 //        url = url + "?FuelStation=" + s + "&FuelType=Petrol" + oil;
-        url = "http://192.168.8.102:8081/api/Fuel/GetFuelStatus?FuelStation=" + s + "&FuelType=" + oil;
+        url = "http://192.168.8.100:8081/api/Fuel/GetFuelStatus?FuelStation=" + s + "&FuelType=" + oil;
         JSONObject object = new JSONObject();
 
         JsonObjectRequest jsonObjectRequest = getJsonObjectRequest(url, s, oil);
@@ -76,28 +81,29 @@ public class DashboardFuel extends AppCompatActivity {
     }
 
     JsonObjectRequest getJsonObjectRequest(String url, String s, String oil) {
-        return new JsonObjectRequest(
-                Request.Method.GET, url, null,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        try {
-                            System.out.println(response);
-                            JSONObject j = new JSONObject(String.valueOf(response.get("data")));
-                            shedId.add((String) j.get("FuelStation") + "-" + (String) j.get("FuelType"));
-                            System.out.println(j.get("id"));
-                            shedName.add((String) j.get("id"));
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }, new Response.ErrorListener() {
+        return new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    System.out.println(response);
+                    JSONObject j = new JSONObject(String.valueOf(response.get("data")));
+                    shedName.add((String) j.get("FuelStation") + ":" + (String) j.get("FuelType"));
+                    System.out.println(j.get("id"));
+                    shedId.add((String) j.get("id"));
+//                    if (oil.equals("Diesel")) {
+                    progressFuel.setVisibility(View.GONE);
+                    listView.setVisibility(View.VISIBLE);
+//                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Log.d(TAG, "Response Error: " + error.getMessage());
             }
-        }
-        ) {
+        }) {
             @Override
             protected VolleyError parseNetworkError(VolleyError volleyError) {
                 Log.d(TAG, "volleyError" + volleyError);
@@ -122,6 +128,7 @@ public class DashboardFuel extends AppCompatActivity {
                 return params;
             }
         };
+
     }
 
 }
