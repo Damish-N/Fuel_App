@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
@@ -59,6 +60,11 @@ public class SignInFuelStation extends AppCompatActivity {
         signInBtnFuelStation = findViewById(R.id.signInBtnFuelStation);
         DB = new DBHelper(this);
 
+        SharedPreferences sharedPreferences = getSharedPreferences("MySharedPref", MODE_PRIVATE);
+
+// Creating an Editor object to edit(write to the file)
+        SharedPreferences.Editor myEdit = sharedPreferences.edit();
+
 
         signUpBtnInFuelStation.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -72,11 +78,30 @@ public class SignInFuelStation extends AppCompatActivity {
         signInBtnFuelStation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                String userName = fuelStationUserName.getText().toString();
+                String password = fuelStationPassword.getText().toString();
+                System.out.println(userName);
+                myEdit.putString("userName", userName);
+                myEdit.putString("fType", "Fuel Type");
 
-                try {
-                    getData();
-                } catch (JSONException e) {
-                    e.printStackTrace();
+                myEdit.commit();
+//                try {
+//                    getData();
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
+
+                if (userName.isEmpty() && password.isEmpty()) {
+//                    Toast.makeText(SignInFuelStation.this, "please fill fully", Toast.LENGTH_SHORT).show();
+                } else {
+                    Boolean checkUser = DB.checkUserNamePassword(userName, password, "0");
+                    if (checkUser) {
+                        Toast.makeText(SignInFuelStation.this, "Signing", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(SignInFuelStation.this, DashboardFuel.class);
+                        startActivity(intent);
+                    } else {
+                        Toast.makeText(SignInFuelStation.this, "UserName or Password wrong", Toast.LENGTH_SHORT).show();
+                    }
                 }
 
 
@@ -115,18 +140,7 @@ public class SignInFuelStation extends AppCompatActivity {
 //            }
 
 
-//                if (userName.isEmpty() && password.isEmpty()) {
-//                    Toast.makeText(SignInFuelStation.this, "please fill fully", Toast.LENGTH_SHORT).show();
-//                } else {
-//                    Boolean checkUser = DB.checkUserNamePassword(userName, password, "0");
-//                    if (checkUser) {
-//                        Toast.makeText(SignInFuelStation.this, "Signing", Toast.LENGTH_SHORT).show();
-//                        Intent intent = new Intent(SignInFuelStation.this, DashboardActivity.class);
-//                        startActivity(intent);
-//                    } else {
-//                        Toast.makeText(SignInFuelStation.this, "UserName or Password wrong", Toast.LENGTH_SHORT).show();
-//                    }
-//                }
+//
             }
         });
 
@@ -136,19 +150,19 @@ public class SignInFuelStation extends AppCompatActivity {
         postParam.put("VehicleNumber", "AAA-0000");
         postParam.put("FuelStation", "Colombo");*/
     private void getData() throws JSONException {
-        String url = "http://192.168.8.100:8081/api/Fuel/UpdateFuelArriveTime";
+        String url = "http://192.168.8.100:8081/api/Fuel/GetFuelStatus?FuelStation=F-0001&FuelType=Petrol";
         mRequestQueue = Volley.newRequestQueue(SignInFuelStation.this);
-                JSONObject object = new JSONObject();
-                try {
-                    object.put("FuelStation", "F-0004");
-                    object.put("FuelType", "Petrol");
-                    object.put("ArrivalTime","2022-10-30T01:06:00.000+00:00");
+        JSONObject object = new JSONObject();
+        try {
+            object.put("FuelStation", "F-0001");
+            object.put("FuelType", "Petrol");
+//            object.put("ArrivalTime", "2022-10-30T01:06:00.000+00:00");
 
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
-        JsonObjectRequest jRequest = new JsonObjectRequest(Request.Method.POST, url, object,
+        JsonObjectRequest jRequest = new JsonObjectRequest(Request.Method.GET, url, null,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
