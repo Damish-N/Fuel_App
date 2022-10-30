@@ -13,7 +13,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -60,27 +59,27 @@ public class DashboardFuel extends AppCompatActivity {
         System.out.println("Your email is:" + s1);
         progressFuel.setVisibility(View.VISIBLE);
         listView.setVisibility(View.GONE);
-        getData(s1, "Petrol");
-        getData(s1, "Diesel");
+        getData(s1, "Petrol", 1);
+        getData(s1, "Diesel", 2);
 
 
     }
 
-    private void getData(String s, String oil) {
+    private void getData(String s, String oil, int i) {
         mRequestQueue = Volley.newRequestQueue(this);
 
 //        url = url + "?FuelStation=" + s + "&FuelType=Petrol" + oil;
         url = "http://192.168.8.100:8081/api/Fuel/GetFuelStatus?FuelStation=" + s + "&FuelType=" + oil;
         JSONObject object = new JSONObject();
 
-        JsonObjectRequest jsonObjectRequest = getJsonObjectRequest(url, s, oil);
+        JsonObjectRequest jsonObjectRequest = getJsonObjectRequest(url, s, oil, i);
 
         mRequestQueue.add(jsonObjectRequest);
         ProgramAdapter programAdapter = new ProgramAdapter(this, shedId, shedName);
         listView.setAdapter(programAdapter);
     }
 
-    JsonObjectRequest getJsonObjectRequest(String url, String s, String oil) {
+    JsonObjectRequest getJsonObjectRequest(String url, String s, String oil, int i) {
         return new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
@@ -91,8 +90,11 @@ public class DashboardFuel extends AppCompatActivity {
                     System.out.println(j.get("id"));
                     shedId.add((String) j.get("id"));
 //                    if (oil.equals("Diesel")) {
-                    progressFuel.setVisibility(View.GONE);
-                    listView.setVisibility(View.VISIBLE);
+                    if (i == 2) {
+                        progressFuel.setVisibility(View.GONE);
+                        listView.setVisibility(View.VISIBLE);
+                    }
+
 //                    }
                 } catch (JSONException e) {
                     e.printStackTrace();

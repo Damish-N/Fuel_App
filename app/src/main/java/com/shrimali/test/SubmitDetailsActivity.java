@@ -118,6 +118,7 @@ public class SubmitDetailsActivity extends AppCompatActivity {
         try {
             object.put("FuelStation", split[0].toString());
             object.put("FuelType", split[1].toString());
+            object.put("FinishTime",timeStamp);
         } catch (JSONException e) {
             e.printStackTrace();
         }
