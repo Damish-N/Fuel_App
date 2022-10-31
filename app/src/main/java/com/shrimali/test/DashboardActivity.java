@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.android.volley.AuthFailureError;
@@ -33,8 +34,13 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 
@@ -46,8 +52,9 @@ public class DashboardActivity extends AppCompatActivity {
     ListView listView;
     CardView cardView;
     String userName, fType;
-    TextView vehicle_details, vehicle_shed, waiting_time, vStatus;
-    Button dptButton;
+    TextView vehicle_details, vehicle_shed, waiting_time, vStatus, fuelList;
+    Button dptButton, logOutVehicle;
+    ProgressBar progressBar;
 
 
     private RequestQueue mRequestQueue;
@@ -68,7 +75,12 @@ public class DashboardActivity extends AppCompatActivity {
         cardView = findViewById(R.id.statusOfVehicle);
         dptButton = findViewById(R.id.dptButton);
         vStatus = findViewById(R.id.vStatus);
+        fuelList = findViewById(R.id.fuelList);
+        logOutVehicle = findViewById(R.id.logOutVehicle);
+
+
         cardView.setVisibility(View.GONE);
+        fuelList.setVisibility(View.GONE);
 
         SharedPreferences sh = getSharedPreferences("MySharedPref", Context.MODE_PRIVATE);
         userName = sh.getString("userName", "");
@@ -98,6 +110,19 @@ public class DashboardActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View view) {
                         depatureFromQueue(userName);
+                    }
+                }
+        );
+
+        logOutVehicle.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        SharedPreferences sharedPreferences = getSharedPreferences("MySharedPref", MODE_PRIVATE);
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        editor.clear().commit();
+                        Intent intent = new Intent(DashboardActivity.this, StartPageActivity.class);
+                        startActivity(intent);
                     }
                 }
         );
@@ -183,9 +208,26 @@ public class DashboardActivity extends AppCompatActivity {
                         cardView.setVisibility(View.VISIBLE);
                         vehicle_details.setText(userName);
                         vehicle_shed.setText("Waiting shed: " + split[1]);
-                        waiting_time.setText("Waiting time" + response.getString("data"));
+                        SimpleDateFormat inputFormatter = new SimpleDateFormat("HH:mm:ss", Locale.ENGLISH);
+                        SimpleDateFormat outputFormatter = new SimpleDateFormat("dd-MM-yyy");
+                        SimpleDateFormat outputFormatterTime = new SimpleDateFormat("HH:mm:ss", Locale.ENGLISH);
+
+                        Date arrivalDate = inputFormatter.parse(response.getString("data"));
+                        String arriveTime = outputFormatterTime.format(arrivalDate);
+
+                        Calendar c = Calendar.getInstance();
+                        c.setTime(arrivalDate);
+                        c.add(Calendar.HOUR, -5);
+                        c.add(Calendar.MINUTE, -30);
+
+                        Date filter = c.getTime();
+                        String timeWaiting = outputFormatterTime.format(filter);
+
+                        waiting_time.setText("Waiting time: \n" + timeWaiting);
                     }
                 } catch (JSONException e) {
+                    e.printStackTrace();
+                } catch (ParseException e) {
                     e.printStackTrace();
                 }
                 getTheShedDetails();
@@ -241,6 +283,9 @@ public class DashboardActivity extends AppCompatActivity {
                             shedId.add("Fuel Available");
                             arriveTime.add(arrTime);
                             System.out.println(new JSONObject(String.valueOf(jsonArray.get(i))).get("FuelStation"));
+                        }
+                        if (shedId.size() == 0) {
+                            fuelList.setVisibility(View.VISIBLE);
                         }
                         ProgramAdapterAvailable programAdapterAvailable = new ProgramAdapterAvailable(getBaseContext(), shedId, shedName, arriveTime);
                         listView.setAdapter(programAdapterAvailable);
