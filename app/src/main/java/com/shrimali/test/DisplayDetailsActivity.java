@@ -1,19 +1,40 @@
 package com.shrimali.test;
 
+import static android.content.ContentValues.TAG;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Base64;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+import com.shrimali.test.models.ProgramAdapterAvailable;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 public class DisplayDetailsActivity extends AppCompatActivity {
 
     TextView fuelStationNameAv, fuelStationTypeAv, fuelStationArriavalAv, fuelStationQueueAv;
     Button addingToQueue;
+    private RequestQueue mRequestQueue;
+
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -41,8 +62,58 @@ public class DisplayDetailsActivity extends AppCompatActivity {
         fuelStationTypeAv.setText("Fuel Type : " + split[1]);
         fuelStationArriavalAv.setText("Arrival Time : " + arrivalTime);
 
-//        getQueueLenght(split[0],split[1]);
+        getQueueLenght(split[0], split[1]);
 
+
+    }
+
+    private void getQueueLenght(String fuelStationName, String fType) {
+        String url = "http://192.168.8.100:8081/api/Fuel/GetFuelQueue?fuelStation=" + fuelStationName + "&fuelType=" + fType;
+        mRequestQueue = Volley.newRequestQueue(this);
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    if (response.getString("status").equals("Success")) {
+                        System.out.println(response.getString("data"));
+                        fuelStationQueueAv.setText("Queue Length : " + response.getString("data"));
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d(TAG, "Response Error: " + error.getMessage());
+            }
+        }) {
+            @Override
+            protected VolleyError parseNetworkError(VolleyError volleyError) {
+                Log.d(TAG, "volleyError" + volleyError);
+                return super.parseNetworkError(volleyError);
+            }
+
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<String, String>();
+                return params;
+            }
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+
+                HashMap<String, String> params = new HashMap<String, String>();
+                String creds = String.format("%s:%s", "FuelAPI", "123456");
+                String auth = "Basic " + Base64.encodeToString(creds.getBytes(), Base64.DEFAULT);
+                params.put("Content-Type", "application/json");
+                params.put("Authorization", auth);
+                System.out.println(params);
+                return params;
+            }
+        };
+
+        mRequestQueue.add(jsonObjectRequest);
 
     }
 }
