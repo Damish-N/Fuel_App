@@ -89,7 +89,7 @@
                     android:layout_height="wrap_content"/>
 
                 <Button
-                    android:id="@+id/view_btn"
+                    android:id="@+id/dptButton"
                     android:layout_margin="10dp"
                     android:text="Depart from Queue"
                     android:backgroundTint="#ec430d"

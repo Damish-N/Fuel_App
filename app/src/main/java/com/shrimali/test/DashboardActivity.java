@@ -7,11 +7,13 @@ import androidx.cardview.widget.CardView;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -23,6 +25,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.shrimali.test.models.ProgramAdapter;
 import com.shrimali.test.models.ProgramAdapterAvailable;
 
@@ -44,6 +47,7 @@ public class DashboardActivity extends AppCompatActivity {
     CardView cardView;
     String userName, fType;
     TextView vehicle_details, vehicle_shed, waiting_time, vStatus;
+    Button dptButton;
 
 
     private RequestQueue mRequestQueue;
@@ -62,6 +66,7 @@ public class DashboardActivity extends AppCompatActivity {
         vehicle_shed = findViewById(R.id.vehicle_shed);
         waiting_time = findViewById(R.id.waiting_time);
         cardView = findViewById(R.id.statusOfVehicle);
+        dptButton = findViewById(R.id.dptButton);
         vStatus = findViewById(R.id.vStatus);
         cardView.setVisibility(View.GONE);
 
@@ -86,6 +91,81 @@ public class DashboardActivity extends AppCompatActivity {
 
 //        JsonRequest
         getData(userName);
+
+
+        dptButton.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        depatureFromQueue(userName);
+                    }
+                }
+        );
+
+
+    }
+
+    private void depatureFromQueue(String userName) {
+        String url = "http://192.168.8.100:8081/api/Fuel/UpdateUserDepartTime";
+        JSONObject object = new JSONObject();
+        try {
+            object.put("VehicleNumber", userName);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, object, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                System.out.println(response);
+                try {
+                    if (response.get("status").equals("Success")) {
+                        new MaterialAlertDialogBuilder(DashboardActivity.this)
+                                .setMessage("Successfully Departure")
+                                .setPositiveButton("Ok",
+                                        (dialogInterface, i) -> {
+                                            Intent intent = new Intent(DashboardActivity.this, DashboardActivity.class);
+                                            startActivity(intent);
+                                            finish();
+                                        }
+                                )
+                                .show();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d(TAG, "Response Error: " + error.getMessage());
+            }
+        }) {
+            @Override
+            protected VolleyError parseNetworkError(VolleyError volleyError) {
+                Log.d(TAG, "volleyError" + volleyError);
+                return super.parseNetworkError(volleyError);
+            }
+
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<String, String>();
+                return params;
+            }
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+
+                HashMap<String, String> params = new HashMap<String, String>();
+                String creds = String.format("%s:%s", "FuelAPI", "123456");
+                String auth = "Basic " + Base64.encodeToString(creds.getBytes(), Base64.DEFAULT);
+                params.put("Content-Type", "application/json");
+                params.put("Authorization", auth);
+                System.out.println(params);
+                return params;
+            }
+        };
+        mRequestQueue.add(jsonObjectRequest);
 
 
     }
@@ -162,7 +242,7 @@ public class DashboardActivity extends AppCompatActivity {
                             arriveTime.add(arrTime);
                             System.out.println(new JSONObject(String.valueOf(jsonArray.get(i))).get("FuelStation"));
                         }
-                        ProgramAdapterAvailable programAdapterAvailable = new ProgramAdapterAvailable(getBaseContext(), shedId, shedName,arriveTime);
+                        ProgramAdapterAvailable programAdapterAvailable = new ProgramAdapterAvailable(getBaseContext(), shedId, shedName, arriveTime);
                         listView.setAdapter(programAdapterAvailable);
 
 //                        System.out.println(response.getString("data"));
