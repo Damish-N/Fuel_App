@@ -106,7 +106,7 @@ public class DashboardActivity extends AppCompatActivity {
     }
 
     private void depatureFromQueue(String userName) {
-        String url = "http://192.168.8.100:8081/api/Fuel/UpdateUserDepartTime";
+        String url = "http://192.168.8.101:8081/api/Fuel/UpdateUserDepartTime";
         JSONObject object = new JSONObject();
         try {
             object.put("VehicleNumber", userName);
@@ -172,7 +172,7 @@ public class DashboardActivity extends AppCompatActivity {
 
     private void getData(String userName) {
 
-        String url = "http://192.168.8.100:8081/api/Fuel/GetQueueWaitingTime?vehicleNumber=" + userName;
+        String url = "http://192.168.8.101:8081/api/Fuel/GetQueueWaitingTime?vehicleNumber=" + userName;
         mRequestQueue = Volley.newRequestQueue(this);
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
             @Override
@@ -225,7 +225,7 @@ public class DashboardActivity extends AppCompatActivity {
     }
 
     private void getTheShedDetails() {
-        String url = "http://192.168.8.100:8081/api/Fuel/GetAllFuelStations?FuelType=" + fType;
+        String url = "http://192.168.8.101:8081/api/Fuel/GetAllFuelStations?FuelType=" + fType;
         mRequestQueue = Volley.newRequestQueue(this);
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
             @Override

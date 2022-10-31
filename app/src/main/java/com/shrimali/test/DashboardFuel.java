@@ -41,7 +41,7 @@ public class DashboardFuel extends AppCompatActivity {
     private StringRequest mStringRequest;
     private ProgressBar progressFuel;
 
-    String url = "http://192.168.8.100:8081/api/Fuel/GetFuelStatus";
+    String url = "http://192.168.8.101:8081/api/Fuel/GetFuelStatus";
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -69,7 +69,7 @@ public class DashboardFuel extends AppCompatActivity {
         mRequestQueue = Volley.newRequestQueue(this);
 
 //        url = url + "?FuelStation=" + s + "&FuelType=Petrol" + oil;
-        url = "http://192.168.8.100:8081/api/Fuel/GetFuelStatus?FuelStation=" + s + "&FuelType=" + oil;
+        url = "http://192.168.8.101:8081/api/Fuel/GetFuelStatus?FuelStation=" + s + "&FuelType=" + oil;
         JSONObject object = new JSONObject();
 
         JsonObjectRequest jsonObjectRequest = getJsonObjectRequest(url, s, oil, i);

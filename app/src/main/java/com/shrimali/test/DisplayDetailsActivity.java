@@ -87,7 +87,7 @@ public class DisplayDetailsActivity extends AppCompatActivity {
     }
 
     private void addToThequeueCall(String userName, String s) {
-        String url = "http://192.168.8.100:8081/api/Fuel/UpdateUserArrivalTime";
+        String url = "http://192.168.8.101:8081/api/Fuel/UpdateUserArrivalTime";
         JSONObject object = new JSONObject();
         try {
             object.put("FuelStation", s);
@@ -152,7 +152,7 @@ public class DisplayDetailsActivity extends AppCompatActivity {
     }
 
     private void getQueueLenght(String fuelStationName, String fType) {
-        String url = "http://192.168.8.100:8081/api/Fuel/GetFuelQueue?fuelStation=" + fuelStationName + "&fuelType=" + fType;
+        String url = "http://192.168.8.101:8081/api/Fuel/GetFuelQueue?fuelStation=" + fuelStationName + "&fuelType=" + fType;
         mRequestQueue = Volley.newRequestQueue(this);
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
             @Override

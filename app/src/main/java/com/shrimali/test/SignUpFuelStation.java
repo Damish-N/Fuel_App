@@ -104,7 +104,7 @@ public class SignUpFuelStation extends AppCompatActivity {
     }
 
     private void createFuelStationOnMongoDB(String userName) {
-        String url = "http://192.168.8.100:8081/api/Fuel/UpdateFuelArriveTime";
+        String url = "http://192.168.8.101:8081/api/Fuel/UpdateFuelArriveTime";
         RequestQueue mRequestQueue = Volley.newRequestQueue(SignUpFuelStation.this);
         //Create a object with without Arrival time
         JSONObject objectForPetrol = new JSONObject();

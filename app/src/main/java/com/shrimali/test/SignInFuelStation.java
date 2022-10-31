@@ -150,7 +150,7 @@ public class SignInFuelStation extends AppCompatActivity {
         postParam.put("VehicleNumber", "AAA-0000");
         postParam.put("FuelStation", "Colombo");*/
     private void getData() throws JSONException {
-        String url = "http://192.168.8.100:8081/api/Fuel/GetFuelStatus?FuelStation=F-0001&FuelType=Petrol";
+        String url = "http://192.168.8.101:8081/api/Fuel/GetFuelStatus?FuelStation=F-0001&FuelType=Petrol";
         mRequestQueue = Volley.newRequestQueue(SignInFuelStation.this);
         JSONObject object = new JSONObject();
         try {

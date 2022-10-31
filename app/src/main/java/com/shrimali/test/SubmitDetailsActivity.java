@@ -12,6 +12,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -25,8 +27,12 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -37,6 +43,8 @@ public class SubmitDetailsActivity extends AppCompatActivity {
     EditText stationName, fuelType, arrivalTime, departureTime;
     Button submitArrival, departureTimeFuelBtn;
     RequestQueue mRequestQueue;
+    LinearLayout prbarFuelContainer, prbarFuelDetailContainer;
+    ProgressBar prbarFuel;
 
 
     @SuppressLint("MissingInflatedId")
@@ -61,6 +69,13 @@ public class SubmitDetailsActivity extends AppCompatActivity {
         departureTime = findViewById(R.id.departureTime);
         departureTimeFuelBtn = findViewById(R.id.departureTimeFuelBtn);
 
+        prbarFuelContainer = findViewById(R.id.prbarFuelContainer);
+        prbarFuelDetailContainer = findViewById(R.id.prbarFuelDetailContainer);
+        prbarFuel = findViewById(R.id.prbarFuel);
+
+        prbarFuelContainer.setVisibility(View.VISIBLE);
+        prbarFuel.setVisibility(View.VISIBLE);
+        prbarFuelDetailContainer.setVisibility(View.GONE);
 
         getData(split[0], split[1]);
 
@@ -111,14 +126,14 @@ public class SubmitDetailsActivity extends AppCompatActivity {
     }
 
     private void updateFinishedTime(String[] split) {
-        String url = "http://192.168.8.100:8081/api/Fuel/UpdateFuelFinishTime";
+        String url = "http://192.168.8.101:8081/api/Fuel/UpdateFuelFinishTime";
         String timeStamp = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.ENGLISH).format(Calendar.getInstance().getTime());
         System.out.println(timeStamp);
         JSONObject object = new JSONObject();
         try {
             object.put("FuelStation", split[0].toString());
             object.put("FuelType", split[1].toString());
-            object.put("FinishTime",timeStamp);
+            object.put("FinishTime", timeStamp);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -179,7 +194,7 @@ public class SubmitDetailsActivity extends AppCompatActivity {
     }
 
     private void updateArrivalTime(String[] split) {
-        String url = "http://192.168.8.100:8081/api/Fuel/UpdateFuelArriveTime";
+        String url = "http://192.168.8.101:8081/api/Fuel/UpdateFuelArriveTime";
         String timeStamp = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.ENGLISH).format(Calendar.getInstance().getTime());
         System.out.println(timeStamp);
         JSONObject object = new JSONObject();
@@ -251,7 +266,7 @@ public class SubmitDetailsActivity extends AppCompatActivity {
         mRequestQueue = Volley.newRequestQueue(this);
 
 //        url = url + "?FuelStation=" + s + "&FuelType=Petrol" + oil;
-        String url = "http://192.168.8.100:8081/api/Fuel/GetFuelStatus?FuelStation=" + s + "&FuelType=" + oil;
+        String url = "http://192.168.8.101:8081/api/Fuel/GetFuelStatus?FuelStation=" + s + "&FuelType=" + oil;
         JSONObject object = new JSONObject();
 
         JsonObjectRequest jsonObjectRequest = getJsonObjectRequest(url, s, oil);
@@ -268,10 +283,51 @@ public class SubmitDetailsActivity extends AppCompatActivity {
                     System.out.println(response);
                     JSONObject j = new JSONObject(String.valueOf(response.get("data")));
                     System.out.println(j.get("id"));
-                    arrivalTime.setText(j.get("ArrivalTime").toString());
-                    departureTime.setText(j.get("FinishTime").toString());
+                    SimpleDateFormat inputFormatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.ENGLISH);
+                    SimpleDateFormat outputFormatter = new SimpleDateFormat("dd-MM-yyy");
+                    SimpleDateFormat outputFormatterTime = new SimpleDateFormat("HH:mm:ss", Locale.ENGLISH);
+
+
+                    if (j.get("FinishTime").toString().contains("0001-01-01T")) {
+
+                        departureTime.setText("Still Fuel is available");
+
+                    }
+                    if (j.get("ArrivalTime").toString().contains("0001-01-01T")) {
+                        arrivalTime.setText("Still Not Arrived");
+                    }
+
+                    if (!j.get("ArrivalTime").toString().contains("0001-01-01T")
+                    ) {
+                        Date arrivalDate = inputFormatter.parse(j.get("ArrivalTime").toString());
+                        String arriveDate = outputFormatter.format(arrivalDate);
+                        String arriveTime = outputFormatterTime.format(arrivalDate);
+
+
+                        arrivalTime.setText("DATE: " + arriveDate + "  || TIME:" + arriveTime);
+
+
+                    }
+                    if (!j.get("FinishTime").toString().contains("0001-01-01T")) {
+                        Date dt = inputFormatter.parse(j.get("FinishTime").toString());
+
+                        String departureDate = outputFormatter.format(dt);
+                        String departureTimeFor = outputFormatterTime.format(dt);
+
+                        System.out.println("DATE: " + departureDate + "  || TIME:" + departureTimeFor);
+                        departureTime.setText("DATE: " + departureDate + "  || TIME:" + departureTimeFor);
+
+
+                    }
+
+                    prbarFuelContainer.setVisibility(View.GONE);
+                    prbarFuel.setVisibility(View.GONE);
+                    prbarFuelDetailContainer.setVisibility(View.VISIBLE);
+
 
                 } catch (JSONException e) {
+                    e.printStackTrace();
+                } catch (ParseException e) {
                     e.printStackTrace();
                 }
             }

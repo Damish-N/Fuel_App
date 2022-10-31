@@ -102,7 +102,7 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     public void createNewUserOnMongo(String VehicleNumber, String fType) {
-        String url = "http://192.168.8.100:8081/api/Fuel/UpdateUserArrivalTime";
+        String url = "http://192.168.8.101:8081/api/Fuel/UpdateUserArrivalTime";
         RequestQueue mRequestQueue = Volley.newRequestQueue(SignUpActivity.this);
         JSONObject object = new JSONObject();
 
