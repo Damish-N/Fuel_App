@@ -14,27 +14,38 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
+        android:gravity="center"
         android:orientation="horizontal"
+        android:padding="15dp"
         tools:ignore="MissingConstraints">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="90dp"
-            android:letterSpacing="0.03"
+            android:layout_weight="5"
             android:text="Filling Station"
             android:textAllCaps="true"
             android:textColor="@color/white"
-            android:textSize="35dp"
+            android:textSize="25dp"
             android:textStyle="bold" />
-    </LinearLayout>
 
+        <Space
+            android:layout_width="2dp"
+            android:layout_height="match_parent"></Space>
+
+        <Button
+            android:id="@+id/logOut"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Log-out"
+            android:textSize="18dp"></Button>
+    </LinearLayout>
 
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_marginTop="10dp"
         android:orientation="vertical">
 
@@ -51,5 +62,6 @@
         android:layout_height="80dp">
 
     </ProgressBar>
+
 
 </LinearLayout>

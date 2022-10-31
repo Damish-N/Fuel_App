@@ -6,11 +6,13 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 
@@ -40,6 +42,7 @@ public class DashboardFuel extends AppCompatActivity {
     private RequestQueue mRequestQueue;
     private StringRequest mStringRequest;
     private ProgressBar progressFuel;
+    Button logOut;
 
     String url = "http://192.168.8.101:8081/api/Fuel/GetFuelStatus";
 
@@ -52,6 +55,7 @@ public class DashboardFuel extends AppCompatActivity {
         Objects.requireNonNull(getSupportActionBar()).hide();
         listView = findViewById(R.id.mainItemFuel);
         progressFuel = findViewById(R.id.progressFuel);
+        logOut = findViewById(R.id.logOut);
 
         SharedPreferences sh = getSharedPreferences("MySharedPref", Context.MODE_PRIVATE);
         String s1 = sh.getString("userName", "");
@@ -61,6 +65,19 @@ public class DashboardFuel extends AppCompatActivity {
         listView.setVisibility(View.GONE);
         getData(s1, "Petrol", 1);
         getData(s1, "Diesel", 2);
+
+        logOut.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        SharedPreferences sharedPreferences = getSharedPreferences("MySharedPref", MODE_PRIVATE);
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        editor.clear().commit();
+                        Intent intent = new Intent(DashboardFuel.this, StartPageActivity.class);
+                        startActivity(intent);
+                    }
+                }
+        );
 
 
     }
