@@ -57,5 +57,20 @@ public class DBHelper extends SQLiteOpenHelper {
         else
             return false;
     }
+    public String getTypeOfFuel(String username){
+        String column1 = "null";
+        SQLiteDatabase MyDB = this.getReadableDatabase();
+        Cursor c = MyDB.rawQuery("Select fType from users where username = ?", new String[] {username});
+        if (c.moveToFirst()){
+            do {
+                // Passing values
+                column1 = c.getString(0);
+                // Do something Here with values
+            } while(c.moveToNext());
+        }
+        c.close();
+        return column1;
+
+    }
 
 }

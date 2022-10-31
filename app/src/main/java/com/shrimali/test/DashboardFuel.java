@@ -75,8 +75,7 @@ public class DashboardFuel extends AppCompatActivity {
         JsonObjectRequest jsonObjectRequest = getJsonObjectRequest(url, s, oil, i);
 
         mRequestQueue.add(jsonObjectRequest);
-        ProgramAdapter programAdapter = new ProgramAdapter(this, shedId, shedName);
-        listView.setAdapter(programAdapter);
+
     }
 
     JsonObjectRequest getJsonObjectRequest(String url, String s, String oil, int i) {
@@ -93,6 +92,8 @@ public class DashboardFuel extends AppCompatActivity {
                     if (i == 2) {
                         progressFuel.setVisibility(View.GONE);
                         listView.setVisibility(View.VISIBLE);
+                        ProgramAdapter programAdapter = new ProgramAdapter(getBaseContext(), shedId, shedName);
+                        listView.setAdapter(programAdapter);
                     }
 
 //                    }
