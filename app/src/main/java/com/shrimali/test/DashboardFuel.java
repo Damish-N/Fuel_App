@@ -89,7 +89,13 @@ public class DashboardFuel extends AppCompatActivity {
                     System.out.println(j.get("id"));
                     shedId.add((String) j.get("id"));
 //                    if (oil.equals("Diesel")) {
-                    if (i == 2) {
+//                    if (i == 2) {
+//                        progressFuel.setVisibility(View.GONE);
+//                        listView.setVisibility(View.VISIBLE);
+//                        ProgramAdapter programAdapter = new ProgramAdapter(getBaseContext(), shedId, shedName);
+//                        listView.setAdapter(programAdapter);
+//                    }
+                    if (shedId.size() == 2 && shedName.size() == 2) {
                         progressFuel.setVisibility(View.GONE);
                         listView.setVisibility(View.VISIBLE);
                         ProgramAdapter programAdapter = new ProgramAdapter(getBaseContext(), shedId, shedName);
