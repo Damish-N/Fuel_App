@@ -29,7 +29,11 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 
@@ -69,7 +73,23 @@ public class DisplayDetailsActivity extends AppCompatActivity {
 
         fuelStationNameAv.setText("Fuel Station : " + split[0].toString());
         fuelStationTypeAv.setText("Fuel Type : " + split[1]);
-        fuelStationArriavalAv.setText("Arrival Time : " + arrivalTime);
+
+        SimpleDateFormat inputFormatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.ENGLISH);
+        SimpleDateFormat outputFormatter = new SimpleDateFormat("dd-MM-yyy");
+        SimpleDateFormat outputFormatterTime = new SimpleDateFormat("HH:mm:ss", Locale.ENGLISH);
+
+
+        Date arrivalDate = null;
+        try {
+            arrivalDate = inputFormatter.parse(arrivalTime);
+            String arriveDate = outputFormatter.format(arrivalDate);
+            String arriveTime = outputFormatterTime.format(arrivalDate);
+            fuelStationArriavalAv.setText("Arrival Date :\n Date : " + arriveDate + " || Time: " + arriveTime);
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
 
         getQueueLenght(split[0], split[1]);
 
