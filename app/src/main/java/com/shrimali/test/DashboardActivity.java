@@ -24,6 +24,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.shrimali.test.models.ProgramAdapter;
+import com.shrimali.test.models.ProgramAdapterAvailable;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -38,6 +39,7 @@ public class DashboardActivity extends AppCompatActivity {
 
     ArrayList<String> shedId = new ArrayList<>();
     ArrayList<String> shedName = new ArrayList<>();
+    ArrayList<String> arriveTime = new ArrayList<>();
     ListView listView;
     CardView cardView;
     String userName, fType;
@@ -154,12 +156,14 @@ public class DashboardActivity extends AppCompatActivity {
 //                        for(:response.getJSONArray("data"));
                         for (int i = 0; i < jsonArray.length(); i++) {
                             String shedNameS = new JSONObject(String.valueOf(jsonArray.get(i))).get("FuelStation").toString();
+                            String arrTime = new JSONObject(String.valueOf(jsonArray.get(i))).get("ArrivalTime").toString();
                             shedName.add(shedNameS + ":" + fType);
-                            shedId.add(new JSONObject(String.valueOf(jsonArray.get(i))).get("ArrivalTime").toString());
+                            shedId.add("Fuel Available");
+                            arriveTime.add(arrTime);
                             System.out.println(new JSONObject(String.valueOf(jsonArray.get(i))).get("FuelStation"));
                         }
-                        ProgramAdapter programAdapter = new ProgramAdapter(getBaseContext(), shedId, shedName);
-                        listView.setAdapter(programAdapter);
+                        ProgramAdapterAvailable programAdapterAvailable = new ProgramAdapterAvailable(getBaseContext(), shedId, shedName,arriveTime);
+                        listView.setAdapter(programAdapterAvailable);
 
 //                        System.out.println(response.getString("data"));
                     }

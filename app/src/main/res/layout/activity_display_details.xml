@@ -1,71 +1,144 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:gravity="center_horizontal"
     android:backgroundTint="#2e313b"
     android:background="@color/white">
 
-    <TextView
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:letterSpacing="0.03"
+            android:text="Fuel Station"
+            android:textAllCaps="true"
+            android:textColor="@color/white"
+            android:textSize="35dp"
+            android:layout_marginTop="90dp"
+            android:layout_marginBottom="10dp"
+            android:textStyle="bold" />
+
+    <androidx.cardview.widget.CardView
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:letterSpacing="0.03"
-        android:text="View Details here"
-        android:textColor="@color/white"
-        android:textSize="35dp"
-        android:layout_marginTop="90dp"
-        android:textStyle="bold" />
+        app:cardCornerRadius="10dp"
+        android:layout_margin="15dp"
+        app:cardBackgroundColor="@color/black"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:gravity="center"
+            android:layout_width="wrap_content"
+            android:orientation="vertical"
+            android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/fuelStationNameAv"
+                android:layout_width="350dp"
+                android:layout_height="45dp"
+                android:text="Fuel Station : "
+                android:textColor="@color/white"
+                android:gravity="center_vertical"
+                android:textStyle="bold"
+                android:textSize="18dp"
+                android:paddingLeft="20dp"/>
+        </LinearLayout>
 
-    <TextView
-        android:layout_width="350dp"
-        android:layout_height="45dp"
-        android:text="Fuel Station : "
-        android:textColor="@color/white"
-        android:textStyle="bold"
-        android:textSize="18dp"
-        android:layout_marginTop="45dp"
-        android:paddingLeft="20dp"/>
+    </androidx.cardview.widget.CardView>
 
-    <TextView
-        android:layout_width="350dp"
-        android:layout_height="45dp"
-        android:text="Fuel Type : "
-        android:textColor="@color/white"
-        android:textStyle="bold"
-        android:textSize="18dp"
-        android:layout_marginTop="48dp"
-        android:paddingLeft="20dp"/>
+    <androidx.cardview.widget.CardView
+        android:layout_width="wrap_content"
+        app:cardCornerRadius="10dp"
+        android:layout_margin="15dp"
+        app:cardBackgroundColor="@color/black"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:gravity="center"
+            android:layout_width="wrap_content"
+            android:orientation="vertical"
+            android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/fuelStationTypeAv"
+                android:layout_width="350dp"
+                android:layout_height="45dp"
+                android:text="Fuel Type : "
+                android:gravity="center_vertical"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                android:textSize="18dp"
+                android:paddingLeft="20dp"/>
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
 
-    <TextView
-        android:layout_width="350dp"
-        android:layout_height="45dp"
-        android:text="Arrival Time : "
-        android:textColor="@color/white"
-        android:textStyle="bold"
-        android:textSize="18dp"
-        android:layout_marginTop="35dp"
-        android:paddingLeft="20dp"/>
+    <androidx.cardview.widget.CardView
+        android:layout_width="wrap_content"
+        app:cardCornerRadius="10dp"
+        android:layout_margin="15dp"
+        app:cardBackgroundColor="@color/black"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:gravity="center"
+            android:layout_width="wrap_content"
+            android:orientation="vertical"
+            android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/fuelStationArriavalAv"
+                android:gravity="center_vertical"
+                android:layout_width="350dp"
+                android:layout_height="45dp"
+                android:text="Arrival Time : "
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                android:textSize="18dp"
+                android:paddingLeft="20dp"/>
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="wrap_content"
+        app:cardCornerRadius="10dp"
+        android:layout_margin="15dp"
+        app:cardBackgroundColor="#603700B3"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:gravity="center"
+            android:layout_width="wrap_content"
+            android:orientation="vertical"
+            android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/fuelStationQueueAv"
+                android:gravity="center_vertical"
+                android:layout_width="350dp"
+                android:layout_height="45dp"
+                android:text="Queue Length : "
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                android:textSize="18dp"
+                android:paddingLeft="20dp"/>
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+
+
 
     <Button
+        android:id="@+id/addingToQueue"
         android:layout_width="350dp"
         android:layout_height="50dp"
         android:layout_marginTop="40dp"
         android:backgroundTint="#ec430d"
-        android:text="Arrival"
+        android:text="Add to queue"
         android:textColor="#FFF"
         android:textSize="18dp"
         android:textStyle="bold" />
 
-    <Button
-        android:layout_width="350dp"
-        android:layout_height="50dp"
-        android:layout_marginTop="10dp"
-        android:backgroundTint="#ec430d"
-        android:text="Departure"
-        android:textColor="#FFF"
-        android:textSize="18dp"
-        android:textStyle="bold" />
+<!--    <Button-->
+<!--        android:layout_width="350dp"-->
+<!--        android:layout_height="50dp"-->
+<!--        android:layout_marginTop="10dp"-->
+<!--        android:backgroundTint="#ec430d"-->
+<!--        android:text="Departure"-->
+<!--        android:textColor="#FFF"-->
+<!--        android:textSize="18dp"-->
+<!--        android:textStyle="bold" />-->
 
 </LinearLayout>
